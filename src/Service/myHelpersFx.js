@@ -51,19 +51,26 @@ const modelInputText = ({ nome, id, label, dataTest, value, onChange }) => {
     </label>);
 };
 
-function newMultipleFilter({ allData, currData, column, operator, value }) {
-  const arr = [...allData];
-
-  switch (operator) {
-  case 'maior que':
-    return arr.filter((e) => (Number(e[column]) > Number(value)));
-  case 'menor que':
-    return arr.filter((e) => (Number(e[column]) < Number(value)));
-  case 'igual a':
-    return arr.filter((e) => (Number(e[column]) === Number(value)));
-  default:
-    return currData;
-  }
+function newMultipleFilter(allData, allFilters) {
+  console.log(allData);
+  let arr = [...allData];
+  allFilters.forEach((i) => {
+    const { col, op, val } = i;
+    switch (op) {
+    case 'maior que':
+      arr = arr.filter((e) => (Number(e[col]) > Number(val)));
+      break;
+    case 'menor que':
+      arr = arr.filter((e) => (Number(e[col]) < Number(val)));
+      break;
+    case 'igual a':
+      arr = arr.filter((e) => (Number(e[col]) === Number(val)));
+      break;
+    default:
+      break;
+    }
+  });
+  return arr;
 }
 
 /* const profile = {

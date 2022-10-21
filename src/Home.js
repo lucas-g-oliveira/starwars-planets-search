@@ -12,17 +12,19 @@ import {
 function Home() {
   const { setDataContext, dataContext } = useContext(AppContext);
   const localState = {
-    results: [],
     filterWord: '',
+    numFilterId: 0,
     filterColumn: 'population',
     filterOperador: 'maior que',
     valueFilter: 0,
     numberFilters: [],
-    numFilterId: 0,
+    results: [],
   };
+
+  // const [colOptios, setColOptions] = useState(filterColumnsOptions);
   const [homeState, setHomeState] = useState(localState);
+
   const {
-    results,
     filterColumn,
     filterOperador,
     valueFilter,
@@ -65,13 +67,15 @@ function Home() {
           numFilterId: numFilterId + 1,
           numberFilters: [...numberFilters,
             { col: filterColumn, op: filterOperador, val: valueFilter, id: numFilterId }],
-          results: newMultipleFilter({
-            allData: dataContext.results,
-            currData: results,
-            column: filterColumn,
-            operator: filterOperador,
-            value: valueFilter,
-          }),
+          results: newMultipleFilter(
+            dataContext.results,
+            [...numberFilters, {
+              col: filterColumn,
+              op: filterOperador,
+              val: valueFilter,
+              id: numFilterId,
+            }],
+          ),
           [name]: '',
           /*  results: dataContext.results
             .filter((e) => (e.)), */
@@ -81,6 +85,7 @@ function Home() {
     default:
       console.log(name);
     }
+    console.log(name);
   };
 
   return (
@@ -134,7 +139,13 @@ function Home() {
           Filtrar
         </button>
       </div>
-      <div>filtros ficarão aqui</div>
+      <div>
+        { numberFilters.map((e) => (
+          <p key={ Math.random() }>
+            { `${e.col} ${e.op} ${e.val}` }
+          </p>
+        ))}
+      </div>
       <table border="1">
         <tbody>
           <tr>{nameIndices.map((e) => <th key={ e }>{e}</th>)}</tr>
