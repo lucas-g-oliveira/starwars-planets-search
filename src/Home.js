@@ -1,16 +1,34 @@
 import React, { useEffect, useContext, useState } from 'react';
-import { remKeyOfObject, arrayToString } from './Service/myHelpersFx';
 import AppContext from './context/AppContext';
 import getPlanetsApi from './Service/getPlanetsApi';
+import { filterColumnsOptions, compFilter, nameIndices } from './myDataColections';
+import {
+  remKeyOfObject,
+  arrayToString,
+  selectModel,
+  newMultipleFilter,
+} from './Service/myHelpersFx';
 
 function Home() {
-  /* const [localData, setLocalData] = useState(''); */
   const { setDataContext, dataContext } = useContext(AppContext);
   const localState = {
     results: [],
     filterWord: '',
+    filterColumn: 'population',
+    filterOperador: 'maior que',
+    valueFilter: 0,
+    numberFilters: [],
+    numFilterId: 0,
   };
   const [homeState, setHomeState] = useState(localState);
+  const {
+    results,
+    filterColumn,
+    filterOperador,
+    valueFilter,
+    numberFilters,
+    numFilterId,
+  } = homeState;
 
   useEffect(() => {
     if (!dataContext.results) {
@@ -26,6 +44,10 @@ function Home() {
     }
   });
 
+  const handlerChangeBasic = ({ target: { value, name } }) => {
+    setHomeState({ ...homeState, [name]: value });
+  };
+
   const handlerFilter = ({ target: { name, value } }) => {
     switch (name) {
     case 'filterWord':
@@ -36,26 +58,30 @@ function Home() {
           .filter((e) => e.name.includes(value)),
       });
       break;
+    case 'btnFiltrar':
+      if (valueFilter.lenght !== 0) {
+        setHomeState({
+          ...homeState,
+          numFilterId: numFilterId + 1,
+          numberFilters: [...numberFilters,
+            { col: filterColumn, op: filterOperador, val: valueFilter, id: numFilterId }],
+          results: newMultipleFilter({
+            allData: dataContext.results,
+            currData: results,
+            column: filterColumn,
+            operator: filterOperador,
+            value: valueFilter,
+          }),
+          [name]: '',
+          /*  results: dataContext.results
+            .filter((e) => (e.)), */
+        });
+      }
+      break;
     default:
       console.log(name);
     }
   };
-
-  const nameIndices = [
-    'Name',
-    'Rotate Period',
-    'Orbital Period',
-    'Diameter',
-    'Climate',
-    'Gravity',
-    'Terrain',
-    'Surface Water',
-    'Population',
-    'Films',
-    'Created',
-    'Edited',
-    'Url',
-  ];
 
   return (
     <>
@@ -73,7 +99,42 @@ function Home() {
           onChange={ handlerFilter }
         />
       </div>
-      <div>Outros filtros</div>
+      <div>
+
+        {selectModel({
+          arrayOptions: filterColumnsOptions,
+          dataTest: 'column-filter',
+          label: 'Column',
+          name: 'filterColumn',
+          value: homeState.filterColumn,
+          onChange: handlerChangeBasic,
+        })}
+
+        {selectModel({
+          arrayOptions: compFilter,
+          dataTest: 'comparison-filter',
+          label: 'Operador',
+          name: 'filterOperador',
+          value: homeState.filterOperador,
+          onChange: handlerChangeBasic,
+        })}
+        <input
+          data-testid="value-filter"
+          name="valueFilter"
+          type="number"
+          value={ homeState.valueFilter }
+          onChange={ handlerChangeBasic }
+        />
+        <button
+          type="button"
+          name="btnFiltrar"
+          data-testid="button-filter"
+          onClick={ handlerFilter }
+        >
+          Filtrar
+        </button>
+      </div>
+      <div>filtros ficarão aqui</div>
       <table border="1">
         <tbody>
           <tr>{nameIndices.map((e) => <th key={ e }>{e}</th>)}</tr>

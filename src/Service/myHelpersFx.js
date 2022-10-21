@@ -20,6 +20,52 @@ function arrayToString(array) {
   return arrayTemp;
 }
 
+const selectModel = ({ name, id, dataTest, arrayOptions, label, value, onChange }) => (
+  <label htmlFor={ id }>
+    {label}
+    <select
+      name={ name }
+      value={ value }
+      id={ id }
+      data-testid={ dataTest }
+      onChange={ onChange }
+    >
+      {arrayOptions.map((e) => (<option key={ e } value={ e }>{e}</option>))}
+    </select>
+  </label>
+);
+
+const modelInputText = ({ nome, id, label, dataTest, value, onChange }) => {
+  const id2 = id ?? Math.random();
+  return (
+    <label htmlFor={ id2 }>
+      {label}
+      <input
+        name={ nome }
+        value={ value }
+        id={ id2 }
+        data-testid={ dataTest }
+        type="text"
+        onChange={ onChange }
+      />
+    </label>);
+};
+
+function newMultipleFilter({ allData, currData, column, operator, value }) {
+  const arr = [...allData];
+
+  switch (operator) {
+  case 'maior que':
+    return arr.filter((e) => (Number(e[column]) > Number(value)));
+  case 'menor que':
+    return arr.filter((e) => (Number(e[column]) < Number(value)));
+  case 'igual a':
+    return arr.filter((e) => (Number(e[column]) === Number(value)));
+  default:
+    return currData;
+  }
+}
+
 /* const profile = {
   firstName: 'Lucas',
   lastName: 'Oliveira',
@@ -32,4 +78,10 @@ const list = ['city', 'name'];
 
 console.log(remKeyOfObject(profile, list)); */
 
-export { remKeyOfObject, arrayToString };
+export {
+  remKeyOfObject,
+  arrayToString,
+  modelInputText,
+  selectModel,
+  newMultipleFilter,
+};
