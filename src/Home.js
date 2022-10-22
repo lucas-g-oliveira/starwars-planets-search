@@ -11,17 +11,17 @@ import {
 
 function Home() {
   const { setDataContext, dataContext } = useContext(AppContext);
+  const [colOptios, setColOptions] = useState(filterColumnsOptions);
   const localState = {
     filterWord: '',
     numFilterId: 0,
-    filterColumn: 'population',
+    filterColumn: colOptios[0],
     filterOperador: 'maior que',
     valueFilter: 0,
     numberFilters: [],
     results: [],
   };
 
-  // const [colOptios, setColOptions] = useState(filterColumnsOptions);
   const [homeState, setHomeState] = useState(localState);
 
   const {
@@ -62,6 +62,8 @@ function Home() {
       break;
     case 'btnFiltrar':
       if (valueFilter.lenght !== 0) {
+        setColOptions(colOptios.filter((e) => e !== filterColumn));
+        console.log(colOptios);
         setHomeState({
           ...homeState,
           numFilterId: numFilterId + 1,
@@ -107,7 +109,7 @@ function Home() {
       <div>
 
         {selectModel({
-          arrayOptions: filterColumnsOptions,
+          arrayOptions: colOptios,
           dataTest: 'column-filter',
           label: 'Column',
           name: 'filterColumn',
