@@ -15,7 +15,7 @@ function Home() {
   const localState = {
     filterWord: '',
     numFilterId: 0,
-    filterColumn: colOptios[0],
+    filterColumn: 'population',
     filterOperador: 'maior que',
     valueFilter: 0,
     numberFilters: [],
@@ -67,6 +67,7 @@ function Home() {
         setHomeState({
           ...homeState,
           numFilterId: numFilterId + 1,
+          filterColumn: colOptios[0] ?? '',
           numberFilters: [...numberFilters,
             { col: filterColumn, op: filterOperador, val: valueFilter, id: numFilterId }],
           results: newMultipleFilter(
