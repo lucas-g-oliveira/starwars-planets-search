@@ -50,40 +50,62 @@ function Home() {
     setHomeState({ ...homeState, [name]: value });
   };
 
+  const filterWordFx = (name, value) => {
+    setHomeState({
+      ...homeState,
+      [name]: value,
+      results: dataContext.results
+        .filter((e) => e.name.includes(value)),
+    });
+  };
+
+  const btnFiltrarFx = (name) => {
+    if (valueFilter.lenght !== 0) {
+      setColOptions(colOptios.filter((e) => e !== filterColumn));
+      setHomeState({
+        ...homeState,
+        numFilterId: numFilterId + 1,
+        filterColumn: colOptios[0] ?? '',
+        numberFilters: [...numberFilters,
+          { col: filterColumn, op: filterOperador, val: valueFilter, id: numFilterId }],
+        results: newMultipleFilter(dataContext.results, [...numberFilters, {
+          col: filterColumn, op: filterOperador, val: valueFilter, id: numFilterId,
+        }]),
+        [name]: '',
+      });
+    }
+  };
+
   const handlerFilter = ({ target: { name, value } }) => {
     switch (name) {
     case 'filterWord':
+      filterWordFx(name, value);
+      break;
+
+    case 'btnFiltrar':
+      btnFiltrarFx(name);
+      break;
+
+    case 'btnRemoveFilter':
+      setColOptions([...colOptios, ...numberFilters
+        .filter((e) => Number(e.id) === Number(value))
+        .map((i) => (i.col))]);
+
       setHomeState({
         ...homeState,
-        [name]: value,
-        results: dataContext.results
-          .filter((e) => e.name.includes(value)),
+        numberFilters: numberFilters.filter((e) => e.id !== Number(value)),
+        filterColumn: colOptios[0] ?? '',
+        results: newMultipleFilter(dataContext.results, numberFilters
+          .filter((e) => e.id !== Number(value))),
       });
       break;
-    case 'btnFiltrar':
-      if (valueFilter.lenght !== 0) {
-        setColOptions(colOptios.filter((e) => e !== filterColumn));
-        console.log(colOptios);
-        setHomeState({
-          ...homeState,
-          numFilterId: numFilterId + 1,
-          filterColumn: colOptios[0] ?? '',
-          numberFilters: [...numberFilters,
-            { col: filterColumn, op: filterOperador, val: valueFilter, id: numFilterId }],
-          results: newMultipleFilter(
-            dataContext.results,
-            [...numberFilters, {
-              col: filterColumn,
-              op: filterOperador,
-              val: valueFilter,
-              id: numFilterId,
-            }],
-          ),
-          [name]: '',
-          /*  results: dataContext.results
-            .filter((e) => (e.)), */
-        });
-      }
+    case 'btnRemoveFilters':
+      setColOptions(filterColumnsOptions);
+      setHomeState({
+        numberFilters: [],
+        filterColumn: 'population',
+        results: dataContext.results,
+      });
       break;
     default:
       console.log(name);
@@ -141,12 +163,30 @@ function Home() {
         >
           Filtrar
         </button>
+        <button
+          name="btnRemoveFilters"
+          type="submit"
+          data-testid="button-remove-filters"
+          onClick={ handlerFilter }
+        >
+          Limpar filtros
+        </button>
       </div>
       <div>
         { numberFilters.map((e) => (
-          <p key={ Math.random() }>
-            { `${e.col} ${e.op} ${e.val}` }
-          </p>
+          <div key={ Math.random() }>
+            <p data-testid="filter">
+              { `${e.col} ${e.op} ${e.val}` }
+              <button
+                name="btnRemoveFilter"
+                type="submit"
+                value={ e.id }
+                onClick={ handlerFilter }
+              >
+                remove filter
+              </button>
+            </p>
+          </div>
         ))}
       </div>
       <table border="1">

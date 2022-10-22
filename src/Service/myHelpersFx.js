@@ -52,7 +52,6 @@ const modelInputText = ({ nome, id, label, dataTest, value, onChange }) => {
 };
 
 function newMultipleFilter(allData, allFilters) {
-  console.log(allData);
   let arr = [...allData];
   allFilters.forEach((i) => {
     const { col, op, val } = i;
