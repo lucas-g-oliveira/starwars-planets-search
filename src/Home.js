@@ -2,16 +2,10 @@ import React, { useEffect, useContext, useState } from 'react';
 import AppContext from './context/AppContext';
 import getPlanetsApi from './Service/getPlanetsApi';
 import { filterColumnsOptions, compFilter, nameIndices } from './myDataColections';
-import {
-  remKeyOfObject,
-  arrayToString,
-  selectModel,
-  newMultipleFilter,
-} from './Service/myHelpersFx';
+import { remKeyOfObject, arrayToString, selectModel, newMultipleFilter, radioButonModel,
+  mySortObjects } from './Service/myHelpersFx';
 
 function Home() {
-  const { setDataContext, dataContext } = useContext(AppContext);
-  const [colOptios, setColOptions] = useState(filterColumnsOptions);
   const localState = {
     filterWord: '',
     numFilterId: 0,
@@ -20,16 +14,19 @@ function Home() {
     valueFilter: 0,
     numberFilters: [],
     results: [],
+    sortColum: '',
+    sortDirection: '',
   };
 
+  const sortInitialState = { order: { column: 'population', sort: 'ASC' } };
+  const { setDataContext, dataContext } = useContext(AppContext);
   const [homeState, setHomeState] = useState(localState);
+  const [colOptios, setColOptions] = useState(filterColumnsOptions);
+  const [sortState, setSortState] = useState(sortInitialState);
+  const { order: { column, sort } } = sortState;
 
   const {
-    filterColumn,
-    filterOperador,
-    valueFilter,
-    numberFilters,
-    numFilterId,
+    filterColumn, filterOperador, valueFilter, numberFilters, numFilterId,
   } = homeState;
 
   useEffect(() => {
@@ -45,11 +42,18 @@ function Home() {
       fetchPlanets();
     }
   });
-
   const handlerChangeBasic = ({ target: { value, name } }) => {
     setHomeState({ ...homeState, [name]: value });
   };
-
+  const btnSortMap = () => {
+    setHomeState({
+      ...localState,
+      results: mySortObjects(homeState.results, column, sort),
+    });
+  };
+  const handlerSort = ({ target: { value, name } }) => {
+    setSortState({ order: { ...sortState.order, [name]: value } });
+  };
   const filterWordFx = (name, value) => {
     setHomeState({
       ...homeState,
@@ -58,7 +62,6 @@ function Home() {
         .filter((e) => e.name.includes(value)),
     });
   };
-
   const btnFiltrarFx = (name) => {
     if (valueFilter.lenght !== 0) {
       setColOptions(colOptios.filter((e) => e !== filterColumn));
@@ -81,16 +84,13 @@ function Home() {
     case 'filterWord':
       filterWordFx(name, value);
       break;
-
     case 'btnFiltrar':
       btnFiltrarFx(name);
       break;
-
     case 'btnRemoveFilter':
       setColOptions([...colOptios, ...numberFilters
         .filter((e) => Number(e.id) === Number(value))
         .map((i) => (i.col))]);
-
       setHomeState({
         ...homeState,
         numberFilters: numberFilters.filter((e) => e.id !== Number(value)),
@@ -110,14 +110,11 @@ function Home() {
     default:
       console.log(name);
     }
-    console.log(name);
   };
 
   return (
     <>
-      <h1>
-        Hello Home
-      </h1>
+      <h1>Hello Home </h1>
       <div>
         Buscar
         <input
@@ -169,8 +166,43 @@ function Home() {
           data-testid="button-remove-filters"
           onClick={ handlerFilter }
         >
-          Limpar filtros
+          Remover Filtros
         </button>
+        <div>
+          {selectModel({
+            arrayOptions: filterColumnsOptions,
+            name: 'column',
+            dataTest: 'column-sort',
+            label: 'Ordenar',
+            value: sortState.column,
+            onChange: handlerSort,
+          })}
+
+          {radioButonModel({
+            id: 'asc',
+            dataTest: 'column-sort-input-asc',
+            type: 'radio',
+            name: 'sort',
+            value: 'ASC',
+            label: 'Ascendente',
+            onChange: handlerSort })}
+
+          {radioButonModel({
+            id: 'desc',
+            dataTest: 'column-sort-input-desc',
+            type: 'radio',
+            name: 'sort',
+            value: 'DESC',
+            label: 'Descendente',
+            onChange: handlerSort })}
+          <button
+            type="submit"
+            data-testid="column-sort-button"
+            onClick={ btnSortMap }
+          >
+            ORDENAR
+          </button>
+        </div>
       </div>
       <div>
         { numberFilters.map((e) => (
@@ -183,7 +215,7 @@ function Home() {
                 value={ e.id }
                 onClick={ handlerFilter }
               >
-                remove filter
+                remove
               </button>
             </p>
           </div>
@@ -197,7 +229,10 @@ function Home() {
               .map((e) => (
                 <tr key={ Math.random() }>
                   {Object.keys(e).map((i) => (
-                    <th key={ Math.random() }>
+                    <th
+                      data-testid={ (i === 'name') ? 'planet-name' : '' }
+                      key={ Math.random() }
+                    >
                       {Array.isArray(e[i]) ? arrayToString(e[i]) : e[i]}
                     </th>))}
                 </tr>))

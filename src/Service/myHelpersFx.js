@@ -16,7 +16,6 @@ function arrayToString(array) {
     arrayTemp.push(`${e}
     `);
   });
-
   return arrayTemp;
 }
 
@@ -51,6 +50,19 @@ const modelInputText = ({ nome, id, label, dataTest, value, onChange }) => {
     </label>);
 };
 
+const radioButonModel = ({ id, dataTest, type, name, value, label, onChange }) => (
+  <label htmlFor={ id }>
+    <input
+      id={ id }
+      data-testid={ dataTest }
+      type={ type }
+      name={ name }
+      value={ value }
+      onChange={ onChange }
+    />
+    {label}
+  </label>);
+
 function newMultipleFilter(allData, allFilters) {
   let arr = [...allData];
   allFilters.forEach((i) => {
@@ -72,6 +84,19 @@ function newMultipleFilter(allData, allFilters) {
   return arr;
 }
 
+const mySortObjects = (data, col, order) => {
+  const arr = [...data.filter((e) => (e[col] !== 'unknown'))];
+  const unknows = [...data.filter((e) => (e[col] === 'unknown'))];
+  switch (order) {
+  case 'ASC':
+    return [...arr.sort((a, b) => (a[col] - b[col])), ...unknows];
+  case 'DESC':
+    return [...arr.sort((a, b) => (b[col] - a[col])), ...unknows];
+  default:
+    return data;
+  }
+};
+
 /* const profile = {
   firstName: 'Lucas',
   lastName: 'Oliveira',
@@ -79,9 +104,7 @@ function newMultipleFilter(allData, allFilters) {
   city: 'Itapevi',
   favoriteColor: 'Azul',
 };
-
 const list = ['city', 'name'];
-
 console.log(remKeyOfObject(profile, list)); */
 
 export {
@@ -90,4 +113,6 @@ export {
   modelInputText,
   selectModel,
   newMultipleFilter,
+  radioButonModel,
+  mySortObjects,
 };
