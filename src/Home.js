@@ -42,6 +42,7 @@ function Home() {
       fetchPlanets();
     }
   });
+
   const handlerChangeBasic = ({ target: { value, name } }) => {
     setHomeState({ ...homeState, [name]: value });
   };
@@ -237,7 +238,6 @@ function Home() {
                     </th>))}
                 </tr>))
             : <h2>Loading...</h2> }
-          {console.log(homeState)}
         </tbody>
       </table>
     </>

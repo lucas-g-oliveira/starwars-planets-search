@@ -3,7 +3,6 @@ function remKeyOfObject(object, removeKeys) {
   if (typeof (object) !== 'object') {
     throw new Error('1º parameter expect a type Object');
   }
-
   const listKeys = Object.keys(object).filter((e) => !removeKeys.some((i) => i === e));
   let mapTemp = {};
   listKeys.forEach((e) => { mapTemp = { ...mapTemp, [e]: object[e] }; });

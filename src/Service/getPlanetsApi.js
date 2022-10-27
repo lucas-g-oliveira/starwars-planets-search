@@ -1,9 +1,8 @@
-const BASE_PLANETS_API = 'https://swapi.dev/api/planets';
-
 const getPlanets = async () => {
-  const response = await fetch(BASE_PLANETS_API);
-  const json = await response.json();
-  return response.ok ? Promise.resolve(json) : Promise.reject(json);
+  const url = 'https://swapi.dev/api/planets';
+  const response = await fetch(url);
+  const data = await response.json();
+  return data;
 };
 
 export default getPlanets;
