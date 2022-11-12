@@ -1,5 +1,4 @@
 function remKeyOfObject(object, removeKeys) {
-  if (!Array.isArray(removeKeys)) { throw new Error('2º parameter expect a type Array'); }
   const listKeys = Object.keys(object).filter((e) => !removeKeys.some((i) => i === e));
   let mapTemp = {};
   listKeys.forEach((e) => { mapTemp = { ...mapTemp, [e]: object[e] }; });
@@ -41,7 +40,7 @@ const selectModel = ({ name, id, dataTest, arrayOptions, label, value, onChange 
       type="text"
       onChange={ onChange }
     />
-  </label>) */;
+  </label>) */
 
 const radioButonModel = ({ id, dataTest, type, name, value, label, onChange }) => (
   <label htmlFor={ id }>
