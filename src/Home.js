@@ -109,7 +109,6 @@ function Home() {
       });
       break;
     default:
-      console.log(name);
     }
   };
 
@@ -213,6 +212,7 @@ function Home() {
               <button
                 name="btnRemoveFilter"
                 type="submit"
+                dataTest="numb-filter-remove"
                 value={ e.id }
                 onClick={ handlerFilter }
               >

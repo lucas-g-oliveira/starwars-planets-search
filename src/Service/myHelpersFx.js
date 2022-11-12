@@ -1,8 +1,5 @@
 function remKeyOfObject(object, removeKeys) {
   if (!Array.isArray(removeKeys)) { throw new Error('2º parameter expect a type Array'); }
-  if (typeof (object) !== 'object') {
-    throw new Error('1º parameter expect a type Object');
-  }
   const listKeys = Object.keys(object).filter((e) => !removeKeys.some((i) => i === e));
   let mapTemp = {};
   listKeys.forEach((e) => { mapTemp = { ...mapTemp, [e]: object[e] }; });
@@ -33,21 +30,18 @@ const selectModel = ({ name, id, dataTest, arrayOptions, label, value, onChange 
   </label>
 );
 
-const modelInputText = ({ nome, id, label, dataTest, value, onChange }) => {
-  const id2 = id ?? Math.random();
-  return (
-    <label htmlFor={ id2 }>
-      {label}
-      <input
-        name={ nome }
-        value={ value }
-        id={ id2 }
-        data-testid={ dataTest }
-        type="text"
-        onChange={ onChange }
-      />
-    </label>);
-};
+/* const modelInputText = ({ nome, id, label, dataTest, value, onChange }) => (
+  <label htmlFor={ id }>
+    {label}
+    <input
+      name={ nome }
+      value={ value }
+      id={ id }
+      data-testid={ dataTest }
+      type="text"
+      onChange={ onChange }
+    />
+  </label>) */;
 
 const radioButonModel = ({ id, dataTest, type, name, value, label, onChange }) => (
   <label htmlFor={ id }>
@@ -73,10 +67,8 @@ function newMultipleFilter(allData, allFilters) {
     case 'menor que':
       arr = arr.filter((e) => (Number(e[col]) < Number(val)));
       break;
-    case 'igual a':
-      arr = arr.filter((e) => (Number(e[col]) === Number(val)));
-      break;
     default:
+      arr = arr.filter((e) => (Number(e[col]) === Number(val)));
       break;
     }
   });
@@ -89,10 +81,8 @@ const mySortObjects = (data, col, order) => {
   switch (order) {
   case 'ASC':
     return [...arr.sort((a, b) => (a[col] - b[col])), ...unknows];
-  case 'DESC':
-    return [...arr.sort((a, b) => (b[col] - a[col])), ...unknows];
   default:
-    return data;
+    return [...arr.sort((a, b) => (b[col] - a[col])), ...unknows];
   }
 };
 
@@ -109,7 +99,7 @@ console.log(remKeyOfObject(profile, list)); */
 export {
   remKeyOfObject,
   arrayToString,
-  modelInputText,
+  /* modelInputText */
   selectModel,
   newMultipleFilter,
   radioButonModel,
