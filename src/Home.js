@@ -64,20 +64,18 @@ function Home() {
     });
   };
   const btnFiltrarFx = (name) => {
-    if (valueFilter.lenght !== 0) {
-      setColOptions(colOptios.filter((e) => e !== filterColumn));
-      setHomeState({
-        ...homeState,
-        numFilterId: numFilterId + 1,
-        filterColumn: colOptios[0] ?? '',
-        numberFilters: [...numberFilters,
-          { col: filterColumn, op: filterOperador, val: valueFilter, id: numFilterId }],
-        results: newMultipleFilter(dataContext.results, [...numberFilters, {
-          col: filterColumn, op: filterOperador, val: valueFilter, id: numFilterId,
-        }]),
-        [name]: '',
-      });
-    }
+    setColOptions(colOptios.filter((e) => e !== filterColumn));
+    setHomeState({
+      ...homeState,
+      numFilterId: numFilterId + 1,
+      /* filterColumn: colOptios[0] ?? '', */
+      numberFilters: [...numberFilters,
+        { col: filterColumn, op: filterOperador, val: valueFilter, id: numFilterId }],
+      results: newMultipleFilter(dataContext.results, [...numberFilters, {
+        col: filterColumn, op: filterOperador, val: valueFilter, id: numFilterId,
+      }]),
+      [name]: '',
+    });
   };
 
   const handlerFilter = ({ target: { name, value } }) => {
@@ -95,20 +93,18 @@ function Home() {
       setHomeState({
         ...homeState,
         numberFilters: numberFilters.filter((e) => e.id !== Number(value)),
-        filterColumn: colOptios[0] ?? '',
+        /* filterColumn: colOptios[0] ?? '', */
         results: newMultipleFilter(dataContext.results, numberFilters
           .filter((e) => e.id !== Number(value))),
       });
       break;
-    case 'btnRemoveFilters':
+    default:
       setColOptions(filterColumnsOptions);
       setHomeState({
         numberFilters: [],
         filterColumn: 'population',
         results: dataContext.results,
       });
-      break;
-    default:
     }
   };
 
@@ -226,18 +222,16 @@ function Home() {
         <tbody>
           <tr>{nameIndices.map((e) => <th key={ e }>{e}</th>)}</tr>
           {homeState.results
-            ? homeState.results
-              .map((e) => (
-                <tr key={ Math.random() }>
-                  {Object.keys(e).map((i) => (
-                    <th
-                      data-testid={ (i === 'name') ? 'planet-name' : '' }
-                      key={ Math.random() }
-                    >
-                      {Array.isArray(e[i]) ? arrayToString(e[i]) : e[i]}
-                    </th>))}
-                </tr>))
-            : <h2>Loading...</h2> }
+            .map((e) => (
+              <tr key={ Math.random() }>
+                {Object.keys(e).map((i) => (
+                  <th
+                    data-testid={ (i === 'name') ? 'planet-name' : '' }
+                    key={ Math.random() }
+                  >
+                    {Array.isArray(e[i]) ? arrayToString(e[i]) : e[i]}
+                  </th>))}
+              </tr>)) }
         </tbody>
       </table>
     </>
