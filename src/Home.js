@@ -64,25 +64,27 @@ function Home() {
     });
   };
   const btnFiltrarFx = (name) => {
-    setColOptions(colOptios.filter((e) => e !== filterColumn));
-    setHomeState({
-      ...homeState,
-      numFilterId: numFilterId + 1,
-      /* filterColumn: colOptios[0] ?? '', */
-      numberFilters: [...numberFilters,
-        { col: filterColumn, op: filterOperador, val: valueFilter, id: numFilterId }],
-      results: newMultipleFilter(dataContext.results, [...numberFilters, {
-        col: filterColumn, op: filterOperador, val: valueFilter, id: numFilterId,
-      }]),
-      [name]: '',
-    });
+    if (valueFilter.lenght !== 0) {
+      setColOptions(colOptios.filter((e) => e !== filterColumn));
+      setHomeState({
+        ...homeState,
+        numFilterId: numFilterId + 1,
+        filterColumn: colOptios[0] ?? '',
+        numberFilters: [...numberFilters,
+          { col: filterColumn, op: filterOperador, val: valueFilter, id: numFilterId }],
+        results: newMultipleFilter(dataContext.results, [...numberFilters, {
+          col: filterColumn, op: filterOperador, val: valueFilter, id: numFilterId,
+        }]),
+        [name]: '',
+      });
+    }
   };
 
   const handlerFilter = ({ target: { name, value } }) => {
-    switch (name) {
-    case 'filterWord':
+    if (name === 'filterWord') {
       filterWordFx(name, value);
-      break;
+    }
+    switch (name) {
     case 'btnFiltrar':
       btnFiltrarFx(name);
       break;
@@ -98,13 +100,15 @@ function Home() {
           .filter((e) => e.id !== Number(value))),
       });
       break;
-    default:
+    case 'btnRemoveFilters':
       setColOptions(filterColumnsOptions);
       setHomeState({
         numberFilters: [],
         filterColumn: 'population',
         results: dataContext.results,
       });
+      break;
+    default:
     }
   };
 

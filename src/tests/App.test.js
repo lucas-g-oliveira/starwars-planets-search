@@ -102,5 +102,16 @@ describe('Testa se os botões, inputs e a tabela de planetas são redenrizados e
 
     userEvent.click(btnRemAllFilt);
     expect(screen.queryAllByTestId('planet-name')).toHaveLength(10);
+
+    userEvent.clear(valFiltOperat);
+
+    userEvent.selectOptions(selColumn, 'surface_water');
+    userEvent.selectOptions(selOperation, 'igual a');
+    userEvent.type(valFiltOperat, '0');
+    userEvent.click(btnNumberFilter);
+    expect(screen.queryAllByTestId('planet-name')).toHaveLength(1);
+
+    userEvent.click(screen.getAllByText('remove')[0]);
+
   });
 })
