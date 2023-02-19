@@ -79,7 +79,6 @@ function Home() {
       });
     }
   };
-
   const handlerFilter = ({ target: { name, value } }) => {
     if (name === 'filterWord') {
       filterWordFx(name, value);
@@ -113,10 +112,9 @@ function Home() {
   };
 
   return (
-    <>
-      <h1>Hello Home </h1>
-      <div>
-        Buscar
+    <div className="home-body">
+      <h1>Star Wars - Planets Informations </h1>
+      <div className="div-filters">
         <input
           data-testid="name-filter"
           name="filterWord"
@@ -125,41 +123,41 @@ function Home() {
           value={ homeState.filterWold }
           onChange={ handlerFilter }
         />
-      </div>
-      <div>
 
-        {selectModel({
-          arrayOptions: colOptios,
-          dataTest: 'column-filter',
-          label: 'Column',
-          name: 'filterColumn',
-          value: homeState.filterColumn,
-          onChange: handlerChangeBasic,
-        })}
+        <div>
+          {selectModel({
+            arrayOptions: colOptios,
+            dataTest: 'column-filter',
+            label: '',
+            name: 'filterColumn',
+            value: homeState.filterColumn,
+            onChange: handlerChangeBasic,
+          })}
 
-        {selectModel({
-          arrayOptions: compFilter,
-          dataTest: 'comparison-filter',
-          label: 'Operador',
-          name: 'filterOperador',
-          value: homeState.filterOperador,
-          onChange: handlerChangeBasic,
-        })}
-        <input
-          data-testid="value-filter"
-          name="valueFilter"
-          type="number"
-          value={ homeState.valueFilter }
-          onChange={ handlerChangeBasic }
-        />
-        <button
-          type="button"
-          name="btnFiltrar"
-          data-testid="button-filter"
-          onClick={ handlerFilter }
-        >
-          Filtrar
-        </button>
+          {selectModel({
+            arrayOptions: compFilter,
+            dataTest: 'comparison-filter',
+            label: '',
+            name: 'filterOperador',
+            value: homeState.filterOperador,
+            onChange: handlerChangeBasic,
+          })}
+          <input
+            data-testid="value-filter"
+            name="valueFilter"
+            type="number"
+            value={ homeState.valueFilter }
+            onChange={ handlerChangeBasic }
+          />
+          <button
+            type="button"
+            name="btnFiltrar"
+            data-testid="button-filter"
+            onClick={ handlerFilter }
+          >
+            Filtrar
+          </button>
+        </div>
         <button
           name="btnRemoveFilters"
           type="submit"
@@ -168,12 +166,13 @@ function Home() {
         >
           Remover Filtros
         </button>
-        <div>
+        <div className="radio-b">
+
           {selectModel({
             arrayOptions: filterColumnsOptions,
             name: 'column',
             dataTest: 'column-sort',
-            label: 'Ordenar',
+            label: '',
             value: sortState.column,
             onChange: handlerSort,
           })}
@@ -204,42 +203,52 @@ function Home() {
           </button>
         </div>
       </div>
-      <div>
+      <br />
+      <section className="filt-col-sect">
         { numberFilters.map((e) => (
-          <div key={ Math.random() }>
-            <p data-testid="filter">
+          <div
+            className="filter-col"
+            key={ Math.random() }
+          >
+            <p
+              data-testid="filter"
+            >
               { `${e.col} ${e.op} ${e.val}` }
               <button
+                className="material-symbols-outlined"
                 name="btnRemoveFilter"
                 type="submit"
                 dataTest="numb-filter-remove"
                 value={ e.id }
                 onClick={ handlerFilter }
               >
-                remove
+                delete
               </button>
             </p>
           </div>
         ))}
-      </div>
-      <table border="1">
-        <tbody>
-          <tr>{nameIndices.map((e) => <th key={ e }>{e}</th>)}</tr>
-          {homeState.results
-            .map((e) => (
-              <tr key={ Math.random() }>
-                {Object.keys(e).map((i) => (
-                  <th
-                    data-testid={ (i === 'name') ? 'planet-name' : '' }
-                    key={ Math.random() }
-                  >
-                    {Array.isArray(e[i]) ? arrayToString(e[i]) : e[i]}
-                  </th>))}
-              </tr>)) }
-        </tbody>
-      </table>
-    </>
+      </section>
+      <section>
+        <table
+          width="1024px"
+        >
+          <tbody>
+            <tr>{nameIndices.map((e) => <th className="th-title" key={ e }>{e}</th>)}</tr>
+            {homeState.results
+              .map((e) => (
+                <tr key={ Math.random() }>
+                  {Object.keys(e).map((i) => (
+                    <th
+                      data-testid={ (i === 'name') ? 'planet-name' : '' }
+                      key={ Math.random() }
+                    >
+                      <n>{Array.isArray(e[i]) ? arrayToString(e[i]) : e[i]}</n>
+                    </th>))}
+                </tr>)) }
+          </tbody>
+        </table>
+      </section>
+    </div>
   );
 }
-
 export default Home;

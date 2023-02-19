@@ -43,7 +43,7 @@ const selectModel = ({ name, id, dataTest, arrayOptions, label, value, onChange 
   </label>) */
 
 const radioButonModel = ({ id, dataTest, type, name, value, label, onChange }) => (
-  <label htmlFor={ id }>
+  <label htmlFor={ id } className="radio-btn">
     <input
       id={ id }
       data-testid={ dataTest }
