@@ -13,7 +13,7 @@
 </br> - Utilizar o React Hook useContext
 </br> - Utilizar o React Hook useEffect
 </br> - Criar React Hooks customizados
-</br> - Escrever testes para garantir que sua aplicação possua uma boa cobertura de testes
+</br> - Escrever testes para garantir que a aplicação possua uma boa cobertura de testes
 
 </section>
 
