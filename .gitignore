@@ -25,3 +25,5 @@ yarn-error.log*
 
 # VSCode repo settings
 .vscode
+
+README.md

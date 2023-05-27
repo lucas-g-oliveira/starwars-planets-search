@@ -42,7 +42,6 @@ function Home() {
       fetchPlanets();
     }
   });
-
   const handlerChangeBasic = ({ target: { value, name } }) => {
     setHomeState({ ...homeState, [name]: value });
   };
@@ -123,7 +122,6 @@ function Home() {
           value={ homeState.filterWold }
           onChange={ handlerFilter }
         />
-
         <div>
           {selectModel({
             arrayOptions: colOptios,
@@ -167,7 +165,6 @@ function Home() {
           Remover Filtros
         </button>
         <div className="radio-b">
-
           {selectModel({
             arrayOptions: filterColumnsOptions,
             name: 'column',
@@ -176,7 +173,6 @@ function Home() {
             value: sortState.column,
             onChange: handlerSort,
           })}
-
           {radioButonModel({
             id: 'asc',
             dataTest: 'column-sort-input-asc',
@@ -242,7 +238,7 @@ function Home() {
                       data-testid={ (i === 'name') ? 'planet-name' : '' }
                       key={ Math.random() }
                     >
-                      <n>{Array.isArray(e[i]) ? arrayToString(e[i]) : e[i]}</n>
+                      <strong>{Array.isArray(e[i]) ? arrayToString(e[i]) : e[i]}</strong>
                     </th>))}
                 </tr>)) }
           </tbody>
